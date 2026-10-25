@@ -1,0 +1,52 @@
+<form class="filters" [formGroup]="form" role="search" aria-label="Filter cars">
+  <label class="field field-search">
+    <span class="field-label">Brand or model</span>
+    <span class="search-box">
+      <fa-icon [icon]="faMagnifyingGlass" />
+      <input
+        type="search"
+        formControlName="query"
+        placeholder="Audi, Q5, Range Rover…"
+        autocomplete="off"
+      />
+    </span>
+  </label>
+
+  <label class="field">
+    <span class="field-label">Budget</span>
+    <select formControlName="maxPrice">
+      @for (option of budgetOptions; track option.value) {
+        <option [ngValue]="option.value">{{ option.label }}</option>
+      }
+    </select>
+  </label>
+
+  <label class="field">
+    <span class="field-label">Power</span>
+    <select formControlName="minPower">
+      @for (option of powerOptions; track option.value) {
+        <option [ngValue]="option.value">{{ option.label }}</option>
+      }
+    </select>
+  </label>
+
+  <label class="field">
+    <span class="field-label">Sort by</span>
+    <select formControlName="sort">
+      @for (option of sortOptions; track option.value) {
+        <option [ngValue]="option.value">{{ option.label }}</option>
+      }
+    </select>
+  </label>
+
+  <div class="summary">
+    <p class="count" aria-live="polite">
+      <strong>{{ resultCount }}</strong> of {{ totalCount }} cars
+    </p>
+    @if (hasActiveFilters) {
+      <button type="button" class="reset" (click)="reset()">
+        <fa-icon [icon]="faRotateLeft" /> Reset
+      </button>
+    }
+  </div>
+</form>

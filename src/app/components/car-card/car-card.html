@@ -1,0 +1,39 @@
+<article class="card">
+  <button
+    type="button"
+    class="fav"
+    [class.on]="isFavorite"
+    [attr.aria-pressed]="isFavorite"
+    [attr.aria-label]="(isFavorite ? 'Remove ' : 'Add ') + car.brand + ' ' + car.model + (isFavorite ? ' from' : ' to') + ' my garage'"
+    (click)="favoriteToggle.emit(car)"
+  >
+    <fa-icon [icon]="faHeart" />
+  </button>
+
+  <div class="photo">
+    <img
+      [src]="'images/' + car.photo"
+      [alt]="car.brand + ' ' + car.model"
+      width="800"
+      height="424"
+      loading="lazy"
+    />
+  </div>
+
+  <div class="body">
+    <p class="brand">{{ car.brand }}</p>
+    <h3 class="model">{{ car.model }}</h3>
+
+    <ul class="specs">
+      <li><fa-icon [icon]="faGaugeHigh" /> {{ car.power }} CV</li>
+      <li [class.low]="lowStock">{{ car.availability }} in stock</li>
+    </ul>
+
+    <div class="foot">
+      <p class="price">{{ car.price * 1000 | currency: 'TND' : 'symbol' : '1.0-0' }}</p>
+      <button type="button" class="more" (click)="detailsOpen.emit(car)">
+        View details<span class="sr-only"> for {{ car.brand }} {{ car.model }}</span>
+      </button>
+    </div>
+  </div>
+</article>

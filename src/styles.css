@@ -1,0 +1,104 @@
+/* ===== Styles GLOBAUX : design tokens + reset =====
+   Les fichiers .css des composants sont « encapsulés » : ils ne s'appliquent qu'à leur
+   propre template. Les variables CSS définies ici sur :root, elles, traversent
+   l'encapsulation (une variable CSS est héritée par tous les descendants). */
+:root {
+  --ink: #12211a;
+  --ink-soft: #3d4f45;
+  --muted: #66766d;
+  --paper: #f1f4ef;
+  --surface: #ffffff;
+  --line: #dde4dd;
+
+  --green-900: #082f21;
+  --green-800: #0b4a32;
+  --green-600: #17724d;
+  --green-100: #e1eee7;
+
+  --heart: #d6334a;
+  --amber: #9a5207;
+  --amber-bg: #fcefd9;
+  --danger: #b3261e;
+
+  --radius-s: 8px;
+  --radius-m: 14px;
+  --radius-l: 22px;
+
+  --shadow-soft: 0 1px 2px rgb(18 33 26 / 6%), 0 10px 24px -14px rgb(18 33 26 / 22%);
+  --shadow-lift: 0 2px 4px rgb(18 33 26 / 8%), 0 26px 44px -20px rgb(18 33 26 / 38%);
+
+  --font-body: 'Figtree', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Barlow Condensed', 'Arial Narrow', 'Roboto Condensed', sans-serif;
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid var(--green-600);
+  outline-offset: 2px;
+}
+
+/* Texte lisible uniquement par les lecteurs d'écran */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Les éléments personnalisés sont « inline » par défaut : on les passe en bloc,
+   sinon le header collant (position: sticky) n'aurait pas de parent à sa taille. */
+app-root {
+  display: block;
+}

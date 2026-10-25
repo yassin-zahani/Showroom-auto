@@ -1,0 +1,83 @@
+@if (status$ | async; as status) {
+  @if (status.kind === 'done') {
+    <div class="done" role="status">
+      <h3 class="done-title">Test drive booked</h3>
+      <p>
+        {{ status.reservation.carLabel }}, {{ status.reservation.date }} at {{ status.reservation.slot }}.
+      </p>
+      <p class="reference">Your reference: <strong>{{ status.reservation.reference }}</strong></p>
+      <p class="hint">Bring your driving licence. We will call {{ status.reservation.phone }} to confirm.</p>
+      <button type="button" class="primary" (click)="closed.emit()">Done</button>
+    </div>
+  } @else {
+    <form class="form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <h3 class="form-title">Book a test drive</h3>
+
+      <label class="field">
+        <span>Full name</span>
+        <input type="text" formControlName="fullName" autocomplete="name" />
+        @if (showError('fullName')) {
+          <small class="error">Enter your full name (3 characters minimum).</small>
+        }
+      </label>
+
+      <label class="field">
+        <span>Mobile number</span>
+        <input type="tel" formControlName="phone" autocomplete="tel" placeholder="98 123 456" />
+        @if (showError('phone')) {
+          <small class="error">Use a Tunisian mobile number: 8 digits starting with 2, 4, 5 or 9.</small>
+        }
+      </label>
+
+      <label class="field">
+        <span>Email <em>(optional)</em></span>
+        <input type="email" formControlName="email" autocomplete="email" />
+        @if (showError('email')) {
+          <small class="error">This email address looks incomplete.</small>
+        }
+      </label>
+
+      <div class="row">
+        <label class="field">
+          <span>Date</span>
+          <input type="date" formControlName="date" [min]="minDate" />
+          @if (showError('date')) {
+            <small class="error">Pick a date from tomorrow onwards.</small>
+          }
+        </label>
+
+        <label class="field">
+          <span>Time</span>
+          <select formControlName="slot">
+            <option value="" disabled>Choose</option>
+            @for (slot of slots; track slot) {
+              <option [value]="slot">{{ slot }}</option>
+            }
+          </select>
+          @if (showError('slot')) {
+            <small class="error">Choose a time slot.</small>
+          }
+        </label>
+      </div>
+
+      <label class="check">
+        <input type="checkbox" formControlName="licence" />
+        <span>I will bring a valid driving licence.</span>
+      </label>
+      @if (showError('licence')) {
+        <small class="error">A valid licence is required for the test drive.</small>
+      }
+
+      @if (status.kind === 'error') {
+        <p class="error" role="alert">We could not save your booking. Please try again.</p>
+      }
+
+      <div class="actions">
+        <button type="button" class="ghost" (click)="closed.emit()">Cancel</button>
+        <button type="submit" class="primary" [disabled]="status.kind === 'saving'">
+          {{ status.kind === 'saving' ? 'Booking…' : 'Confirm booking' }}
+        </button>
+      </div>
+    </form>
+  }
+}

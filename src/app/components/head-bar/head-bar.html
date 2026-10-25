@@ -1,0 +1,21 @@
+<header class="bar">
+  <div class="brand">
+    <fa-icon class="brand-icon" [icon]="faCarSide" />
+    <div>
+      <h1 class="brand-name">Yassine's Showroom</h1>
+      <p class="tagline">New cars, ready to drive in Tunisia</p>
+    </div>
+  </div>
+
+  <button
+    type="button"
+    class="garage"
+    [class.active]="garageActive"
+    [attr.aria-pressed]="garageActive"
+    (click)="garageToggle.emit()"
+  >
+    <fa-icon [icon]="faHeart" />
+    <span class="garage-label">Yassine's garage</span>
+    <span class="badge">{{ favoritesCount }}<span class="sr-only"> saved cars</span></span>
+  </button>
+</header>

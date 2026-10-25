@@ -1,0 +1,20 @@
+{
+  "name": "showroom-scraper",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Petit serveur Node qui calcule des statistiques de prix du marché tunisien pour le showroom Angular.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "start:env": "node --env-file=.env src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "css-select": "^7.0.0",
+    "htmlparser2": "^12.0.0"
+  }
+}

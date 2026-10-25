@@ -1,0 +1,32 @@
+{
+  "books-demo": {
+    "label": "books.toscrape.com",
+    "country": "UK (practice site)",
+    "currency": "GBP",
+    "note": "Practice site built for scraping lessons: these are BOOK prices in pounds. It proves the pipeline works end to end, it says nothing about car prices.",
+    "urlTemplate": "https://books.toscrape.com/catalogue/page-{page}.html",
+    "humanUrl": "https://books.toscrape.com/",
+    "pages": 2,
+    "item": "article.product_pod",
+    "title": { "selector": "h3 a", "attr": "title" },
+    "price": ".price_color",
+    "link": { "selector": "h3 a", "attr": "href" },
+    "priceBounds": [1, 1000]
+  },
+
+  "_template-your-site": {
+    "_comment": "Copie ce bloc, renomme-le (sans le préfixe _), remplis-le, puis lance avec SCRAPER_SOURCE=<ton-nom>. Les clés commençant par _ sont ignorées.",
+    "label": "example.com",
+    "country": "FR",
+    "currency": "EUR",
+    "requiresOptIn": true,
+    "urlTemplate": "https://www.example.com/voitures?q={query}&page={page}",
+    "pages": 1,
+    "item": ".annonce",
+    "title": ".annonce-titre",
+    "price": ".annonce-prix",
+    "year": ".annonce-annee",
+    "link": { "selector": "a", "attr": "href" },
+    "priceBounds": [500, 500000]
+  }
+}

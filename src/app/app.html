@@ -1,0 +1,59 @@
+@if (vm$ | async; as vm) {
+  <app-head-bar
+    [favoritesCount]="vm.favoriteIds.length"
+    [garageActive]="vm.garageOnly"
+    (garageToggle)="toggleGarage()"
+  />
+
+  <main class="page">
+    <section class="intro">
+      <h2 class="intro-title">{{ vm.garageOnly ? 'Yassine garage' : 'Find your next car' }}</h2>
+      <p class="intro-text">
+        {{
+          vm.garageOnly
+            ? 'The cars you saved, ready for a test drive.'
+            : 'Browse the collection, save your favourites and book a test drive.'
+        }}
+      </p>
+    </section>
+
+    <app-search-bar
+      [resultCount]="vm.cars.length"
+      [totalCount]="vm.total"
+      (filtersChange)="onFiltersChange($event)"
+    />
+
+    @if (vm.cars.length > 0) {
+      <section class="grid" aria-label="Cars">
+        @for (car of vm.cars; track car.id) {
+          <app-car-card
+            [car]="car"
+            [isFavorite]="vm.favoriteIds.includes(car.id)"
+            (favoriteToggle)="toggleFavorite($event)"
+            (detailsOpen)="openDetails($event)"
+          />
+        }
+      </section>
+    } @else {
+      <section class="empty">
+        @if (vm.garageOnly && vm.total === 0) {
+          <h3>Your garage is empty</h3>
+          <p>Tap the heart on any car to save it here.</p>
+          <button type="button" class="empty-action" (click)="toggleGarage()">Browse all cars</button>
+        } @else {
+          <h3>No car matches these filters</h3>
+          <p>Try a larger budget or a lower power, or reset the filters above.</p>
+        }
+      </section>
+    }
+  </main>
+
+  @if (selectedCar) {
+    <app-car-detail
+      [car]="selectedCar"
+      [isFavorite]="vm.favoriteIds.includes(selectedCar.id)"
+      (favoriteToggle)="toggleFavorite($event)"
+      (closed)="closeDetails()"
+    />
+  }
+}

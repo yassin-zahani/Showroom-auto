@@ -1,0 +1,77 @@
+<section class="market" aria-labelledby="market-title" aria-live="polite">
+  <h3 id="market-title" class="title">Market check</h3>
+
+  @if (state$ | async; as state) {
+    @switch (state.status) {
+      @case ('loading') {
+        <div class="skeleton" aria-busy="true">
+          <span class="bar wide"></span>
+          <span class="bar"></span>
+        </div>
+        <p class="hint">Looking at recent listings on the Tunisian market…</p>
+      }
+
+      @case ('error') {
+        <p class="message">The market service is not reachable right now.</p>
+        <button type="button" class="retry" (click)="retry()">Try again</button>
+      }
+
+      @case ('empty') {
+        <p class="message">No comparable listings found for this model.</p>
+        <p class="hint">
+          Searched: {{ state.stats.brand }} {{ state.stats.model }}@if (state.stats.minYear) {, {{ state.stats.minYear }} and newer}.
+        </p>
+      }
+
+      @case ('ready') {
+        @if (state.stats.comparable) {
+          <div class="figures">
+            <div>
+              <p class="figure-label">Showroom (new)</p>
+              <p class="figure">{{ state.showroomPriceTnd | currency: 'TND' : 'symbol' : '1.0-0' }}</p>
+            </div>
+            <div>
+              <p class="figure-label">Market median</p>
+              <p class="figure">{{ state.stats.median! | currency: 'TND' : 'symbol' : '1.0-0' }}</p>
+            </div>
+          </div>
+
+          <p class="gap">
+            @let gap = gapPercent(state.showroomPriceTnd, state.stats.median!);
+            {{ gap > 0 ? '+' : '' }}{{ gap }} % vs the market median
+          </p>
+
+          <p class="hint">
+            Range {{ state.stats.min! | number: '1.0-0' }} to {{ state.stats.max! | number: '1.0-0' }} DT
+            from {{ state.stats.count }} used or nearly-new listings@if (state.stats.minYear) { ({{ state.stats.minYear }} and newer)}.
+            A new car and a used one are never exactly comparable.
+          </p>
+        } @else {
+          <div class="figures">
+            <div>
+              <p class="figure-label">Median price</p>
+              <p class="figure">{{ state.stats.median! | currency: state.stats.currency : 'symbol-narrow' : '1.2-2' }}</p>
+            </div>
+            <div>
+              <p class="figure-label">Range</p>
+              <p class="figure">{{ state.stats.min! | number: '1.0-0' }} to {{ state.stats.max! | number: '1.0-0' }}</p>
+            </div>
+          </div>
+          <p class="hint">Computed from {{ state.stats.count }} items in {{ state.stats.currency }}.</p>
+          @if (state.stats.note) {
+            <p class="hint">{{ state.stats.note }}</p>
+          }
+        }
+
+        <p class="source">
+          @if (state.stats.mode === 'mock') {
+            <span class="demo">Demo data</span> These figures are simulated, not real listings.
+          } @else {
+            Based on {{ state.stats.source }}, updated {{ state.stats.fetchedAt | date: 'dd/MM HH:mm' }}.
+          }
+          <a [href]="state.stats.sourceUrl" target="_blank" rel="noopener noreferrer">{{ state.stats.comparable ? 'See real listings' : 'Open the source site' }}</a>
+        </p>
+      }
+    }
+  }
+</section>

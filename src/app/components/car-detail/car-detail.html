@@ -1,0 +1,54 @@
+<div class="backdrop" (click)="closed.emit()"></div>
+
+<div
+  #dialog
+  class="dialog"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-labelledby]="'detail-title-' + car.id"
+  tabindex="-1"
+>
+  <button type="button" class="close" aria-label="Close details" (click)="closed.emit()">
+    <fa-icon [icon]="faXmark" />
+  </button>
+
+  <div class="photo">
+    <img [src]="'images/' + car.photo" [alt]="car.brand + ' ' + car.model" width="800" height="424" />
+  </div>
+
+  <div class="content">
+    <p class="brand">{{ car.brand }}</p>
+    <h2 class="model" [id]="'detail-title-' + car.id">{{ car.model }}</h2>
+
+    <div class="headline">
+      <p class="price">{{ car.price * 1000 | currency: 'TND' : 'symbol' : '1.0-0' }}</p>
+      <ul class="specs">
+        <li><fa-icon [icon]="faGaugeHigh" /> {{ car.power }} CV</li>
+        <li [class.low]="car.availability <= 3">{{ car.availability }} in stock</li>
+      </ul>
+    </div>
+
+    <p class="description">{{ car.description }}</p>
+
+    @if (showForm) {
+      <app-test-drive-form [car]="car" (closed)="showForm = false" />
+    } @else {
+      <div class="actions">
+        <button type="button" class="primary" (click)="showForm = true">
+          <fa-icon [icon]="faCalendarCheck" /> Book a test drive
+        </button>
+        <button
+          type="button"
+          class="secondary"
+          [class.on]="isFavorite"
+          [attr.aria-pressed]="isFavorite"
+          (click)="favoriteToggle.emit(car)"
+        >
+          <fa-icon [icon]="faHeart" /> {{ isFavorite ? 'Saved in my garage' : 'Save to my garage' }}
+        </button>
+      </div>
+
+      <app-market-price [car]="car" />
+    }
+  </div>
+</div>
